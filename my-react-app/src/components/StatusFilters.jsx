@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FiFilter } from "react-icons/fi";
 
-const StatusFilters = () => {
+const StatusFilters = ({ statusFilter, setStatusFilter }) => {
   const [activeFilter, setActiveFilter] = useState("all");
 
   return (
@@ -12,22 +12,22 @@ const StatusFilters = () => {
       </div>
       
       <button 
-        onClick={() => setActiveFilter("all")}
-        className={`px-3 py-1 text-sm rounded-md ${activeFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+        onClick={() => setStatusFilter("all")}
+        className={`px-3 py-1 text-sm rounded-md ${statusFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
       >
         All
       </button>
-      
+
       <button 
-        onClick={() => setActiveFilter("completed")}
-        className={`px-3 py-1 text-sm rounded-md ${activeFilter === 'completed' ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+        onClick={() => setStatusFilter("completed")}
+        className={`px-3 py-1 text-sm rounded-md ${statusFilter === 'completed' ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
       >
         Completed
       </button>
       
       <button 
-        onClick={() => setActiveFilter("pending")}
-        className={`px-3 py-1 text-sm rounded-md ${activeFilter === 'pending' ? 'bg-yellow-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+        onClick={() => setStatusFilter("pending")}
+        className={`px-3 py-1 text-sm rounded-md ${statusFilter === 'pending' ? 'bg-yellow-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
       >
         Pending
       </button>

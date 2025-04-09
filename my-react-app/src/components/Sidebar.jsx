@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import FilterButtons from "./FilterButtons";
 import { FiHome, FiPlus, FiFilter } from 'react-icons/fi';
 
-const Sidebar = () => {
+const Sidebar = ({ filter, setFilter }) => {
   const location = useLocation();
 
   return (
@@ -24,7 +24,7 @@ const Sidebar = () => {
           <FiFilter size={14} />
           <span>FILTERS</span>
         </p>
-        <FilterButtons />
+        <FilterButtons filter={filter} setFilter={setFilter} />
       </div>
     </div>
   );

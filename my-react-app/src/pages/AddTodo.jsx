@@ -3,14 +3,35 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { FiSave, FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
-
+import { getAuth } from "firebase/auth";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { toast } from "react-hot-toast";
+import { useEffect } from "react";
+import { useLocation,useNavigate  } from "react-router-dom";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+ 
 const AddTodo = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [frequency, setFrequency] = useState("None");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [frequency, setFrequency] = useState("None");
+    const navigate = useNavigate();
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const todoId = params.get("id");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async  (e) => {
     e.preventDefault();
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+        toast.error("You must be logged in to add tasks.");
+        return;
+      }
+
+    const uid = user.uid;
+
 
     const newTodo = {
       title,
@@ -19,18 +40,65 @@ const AddTodo = () => {
       completed: false,
       tracking: {},
       subtasks: [],
+      createdAt: new Date(),
     };
 
-    console.log("Submitting Todo:", newTodo);
-    // Send newTodo to JSON server or global state here
-
-    // Reset form
-    setTitle("");
-    setDescription("");
-    setFrequency("None");
-    alert("Task added successfully!");
+     
+        try {
+            if (todoId) {
+              
+              const todoRef = doc(db, "users", uid, "todos", todoId);
+              await updateDoc(todoRef, {
+                title,
+                description,
+                frequency,
+              });
+              toast.success("Task updated successfully!");
+              navigate("/");
+            } else {
+              
+              await addDoc(collection(db, "users", uid, "todos"), newTodo);
+              
+              toast.success("Task added successfully!");
+            }
+        
+            setTitle("");
+            setDescription("");
+            setFrequency("None");
+          } catch (error) {
+            console.error("Error saving todo:", error);
+            toast.error("Failed to save task.");
+          }
   };
 
+  useEffect(() => {
+    const fetchTodo = async () => {
+      if (!todoId) return;
+  
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return toast.error("You must be logged in.");
+  
+      try {
+        const todoRef = doc(db, "users", user.uid, "todos", todoId);
+        const docSnap = await getDoc(todoRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setTitle(data.title);
+          setDescription(data.description);
+          setFrequency(data.frequency || "None");
+        } else {
+          toast.error("Todo not found");
+        }
+      } catch (err) {
+        toast.error("Failed to load task");
+        console.error(err);
+      }
+    };
+  
+    fetchTodo();
+  }, [todoId]);
+  
   return (
     <div className="flex h-screen bg-gray-900">
       <Sidebar />
@@ -38,7 +106,9 @@ const AddTodo = () => {
         <Navbar />
 
         <div className="p-8 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6 text-white">Create New Task</h2>
+        <h2 className="text-2xl font-bold mb-6 text-white">
+          {todoId ? "Edit Task" : "Create New Task"}
+        </h2>
           
           <form onSubmit={handleSubmit} className="space-y-6 bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
             <div>
@@ -105,7 +175,8 @@ const AddTodo = () => {
                 className="flex-1 bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
               >
                 <FiSave size={18} />
-                <span>Save Task</span>
+                <span>{todoId ? "Update Task" : "Save Task"}</span>
+
               </button>
             </div>
           </form>

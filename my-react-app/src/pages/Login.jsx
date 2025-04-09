@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FiLogIn, FiMail, FiLock } from "react-icons/fi";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { toast } from "react-hot-toast";
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -17,13 +21,23 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    alert("Login successful!");
-    navigate("/");
+    try {
+        await signInWithEmailAndPassword(auth, formData.email, formData.password);
+        toast.success("Login successful!");
+        navigate("/");  
+      } catch (error) {
+        if (error.code === "auth/invalid-credential") {
+            toast.error("Invalid credentials. Please try again.");
+            console.log(error.message);
+      
+          } else {
+            toast.error("Something went wrong. Please try again.");
+          }
+        
   };
-
+  }
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">

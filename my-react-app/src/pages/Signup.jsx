@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiUser, FiMail, FiLock, FiUserPlus } from "react-icons/fi";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +14,7 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -16,18 +23,40 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("User Signup Data:", formData);
-    setFormData({
-      username: "",
-      email: "",
-      password: "",
-    });
-    alert("Signup successful!");
+    try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+    
+        // Optional: Set display name
+        await updateProfile(userCredential.user, {
+          displayName: formData.username,
+        });
+        toast.success("Signup successful!");
+        setFormData({ username: "", email: "", password: "" });
+        setTimeout(() => {
+            navigate("/login");
+          }, 1500);
+      } catch (error) {
+        if (error.code === "auth/email-already-in-use") {
+            toast.error("This email is already registered.");
+          } else if (error.code === "auth/invalid-email") {
+            toast.error("Invalid email address.");
+          } else if (error.code === "auth/weak-password") {
+            toast.error("Password should be at least 6 characters.");
+          } else {
+            toast.error("Signup failed. Please try again.");
+            console.error("Signup error:", error.code);
+          }
+      }    
   };
 
-  return (<div className="min-h-screen bg-gray-900 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+  return (
+  <div className="min-h-screen bg-gray-900 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
     <div className="w-full max-w-md">
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-indigo-400">TaskMaster</h1>

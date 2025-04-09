@@ -2,15 +2,44 @@ import { useState } from "react";
 import TrackingCheckbox from "./TrackingCheckbox";
 import SubtaskProgress from "./SubtaskProgress";
 import { FiPlus } from "react-icons/fi";
+import { format, startOfWeek, startOfMonth } from "date-fns";
 
-const TodoCarddisplay = ({ todo, onToggle, onSubtaskToggle, onAddSubtask }) => {
+
+const TodoCarddisplay = ({ todo, onToggle, onSubtaskToggle, onAddSubtask, onEditSubtask, onDeleteSubtask }) => {
   const [showForm, setShowForm] = useState(false);
   const [subtaskTitle, setSubtaskTitle] = useState("");
   const [subtaskFrequency, setSubtaskFrequency] = useState("None");
+  const [error, setError] = useState("");
+
+  
+  const getAllowedFrequencies = () => {
+    switch (todo.frequency) {
+      case "Daily":
+        return ["Daily"];
+      case "Weekly":
+        return ["Daily", "Weekly"];
+      case "Monthly":
+        return ["Daily", "Weekly", "Monthly"];
+      case "None":
+      default:
+        return ["Daily", "Weekly", "Monthly", "None"];
+    }
+  };
+
+  const allowedFrequencies = getAllowedFrequencies();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!subtaskTitle.trim()) return;
+    if (!subtaskTitle.trim()) {
+      setError("Subtask title is required");
+      return;
+    }
+
+   
+    if (!allowedFrequencies.includes(subtaskFrequency)) {
+      setError(`Subtask frequency must be one of: ${allowedFrequencies.join(", ")}`);
+      return;
+    }
 
     onAddSubtask(todo.id, {
       title: subtaskTitle.trim(),
@@ -20,6 +49,7 @@ const TodoCarddisplay = ({ todo, onToggle, onSubtaskToggle, onAddSubtask }) => {
     setSubtaskTitle("");
     setSubtaskFrequency("None");
     setShowForm(false);
+    setError("");
   };
 
   return (
@@ -33,16 +63,28 @@ const TodoCarddisplay = ({ todo, onToggle, onSubtaskToggle, onAddSubtask }) => {
 
       <p className="text-gray-300">{todo.description}</p>
 
-      <TrackingCheckbox
-        tracking={todo.tracking}
-        onChange={(date) => onToggle(todo.id, date)}
-      />
+      <div className="flex flex-wrap gap-3">
+        <TrackingCheckbox
+          tracking={todo.tracking || {}}
+          frequency={todo.frequency}
+          onToggle={(d) => onToggle(todo.id, d)}
+        />
+      </div>
 
-      <SubtaskProgress subtasks={todo.subtasks} onSubtaskToggle={onSubtaskToggle} />
+      <SubtaskProgress 
+        subtasks={todo.subtasks || []} 
+        onSubtaskToggle={onSubtaskToggle}
+        onEditSubtask={onEditSubtask}
+        onDeleteSubtask={onDeleteSubtask}
+        mainTaskFrequency={todo.frequency}
+      />
 
       <button
         className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
-        onClick={() => setShowForm(!showForm)}
+        onClick={() => {
+          setShowForm(!showForm);
+          setError("");
+        }}
       >
         {showForm ? "Cancel" : (
           <>
@@ -63,8 +105,10 @@ const TodoCarddisplay = ({ todo, onToggle, onSubtaskToggle, onAddSubtask }) => {
             required
           />
 
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+
           <div className="flex flex-wrap gap-4 text-sm">
-            {["Daily", "Weekly", "Monthly", "None"].map((option) => (
+            {allowedFrequencies.map((option) => (
               <label key={option} className="flex items-center">
                 <input
                   type="radio"

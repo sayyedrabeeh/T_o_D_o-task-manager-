@@ -26,7 +26,7 @@ const TodoCard = ({ title, description, completed, completedDate, frequency }) =
         </p>
       )}
       
-      <div className="flex gap-3 mt-3">
+      {/* <div className="flex gap-3 mt-3">
         <button className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
           <FiTrash size={16} />
         </button>
@@ -36,7 +36,7 @@ const TodoCard = ({ title, description, completed, completedDate, frequency }) =
         <button className="p-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors">
           <FiEdit size={16} />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
