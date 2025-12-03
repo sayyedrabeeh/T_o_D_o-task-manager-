@@ -2,17 +2,18 @@ import { FiTrash, FiCheck, FiEdit } from "react-icons/fi";
 
 const TodoCard = ({ title, description, completed, completedDate, frequency }) => {
   const badgeColor = {
-    Daily: "bg-blue-600",
-    Weekly: "bg-indigo-600",
-    Monthly: "bg-purple-600",
+        Daily: "from-blue-600 to-cyan-600",
+    Weekly: "from-green-600 to-emerald-600",
+    Monthly: "from-purple-600 to-pink-600",
+     
   }[frequency] || "";
 
-  return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-5 space-y-3 border border-gray-700 hover:border-gray-600 transition-all">
+ return (
+    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl rounded-lg p-5 space-y-3 border border-gray-700 hover:border-purple-500/50 transition-all duration-300 hover:shadow-purple-500/20">
       <div className="flex justify-between items-start">
         <h2 className="text-lg font-bold text-white">{title}</h2>
         {frequency && (
-          <span className={`text-white text-xs px-3 py-1 rounded-full ${badgeColor}`}>
+          <span className={`text-white text-xs px-3 py-1 rounded-full bg-gradient-to-r ${badgeColor} shadow-lg`}>
             {frequency}
           </span>
         )}
@@ -25,18 +26,6 @@ const TodoCard = ({ title, description, completed, completedDate, frequency }) =
           <FiCheck className="mr-1" /> Completed on: {completedDate}
         </p>
       )}
-      
-      {/* <div className="flex gap-3 mt-3">
-        <button className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
-          <FiTrash size={16} />
-        </button>
-        <button className="p-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">
-          <FiCheck size={16} />
-        </button>
-        <button className="p-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors">
-          <FiEdit size={16} />
-        </button>
-      </div> */}
     </div>
   );
 };
