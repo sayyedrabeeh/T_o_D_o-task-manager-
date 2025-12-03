@@ -108,7 +108,7 @@ const TodoCarddisplay = ({ todo, onToggle, onSubtaskToggle, onAddSubtask, onEdit
           {error && <p className="text-red-400 text-sm">{error}</p>}
 
           <div className="flex flex-wrap gap-4 text-sm">
-            {allowed.map((option) => (
+            {allowedFrequencies.map((option) => (
               <label key={option} className="flex items-center cursor-pointer">
                 <input
                   type="radio"

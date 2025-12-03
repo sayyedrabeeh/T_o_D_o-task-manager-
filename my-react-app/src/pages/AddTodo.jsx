@@ -92,6 +92,7 @@ const AddTodo = () => {
               await addDoc(collection(db, "users", uid, "todos"), newTodo);
               
               toast.success("Task added successfully!");
+              navigate("/");
             }
         
             setTitle("");
