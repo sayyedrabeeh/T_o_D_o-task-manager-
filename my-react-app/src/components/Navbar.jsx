@@ -31,12 +31,12 @@ const Navbar = () => {
     }
   };
 
-  return (
-    <nav className="bg-gray-800 shadow-md p-4 flex justify-between items-center">
+ return (
+    <nav className="bg-gradient-to-r from-black via-gray-900 to-black shadow-2xl p-4 flex justify-between items-center border-b border-gray-800">
       <div className="flex items-center md:hidden">
         <button 
           onClick={() => setShowSidebar(!showSidebar)} 
-          className="text-gray-300 hover:text-white"
+          className="text-gray-300 hover:text-white transition-colors duration-300"
         >
           <FiMenu size={24} />
         </button>
@@ -47,30 +47,31 @@ const Navbar = () => {
       <div className="relative">
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+          className="bg-gradient-to-r from-gray-800 to-gray-700 hover:from-purple-600 hover:to-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-lg"
         >
           <FiUser size={18} />
           <span className="hidden sm:inline">Account</span>
         </button>
         
         {showMenu && (
-          <div className="absolute right-0 mt-2 w-48 bg-gray-700 shadow-xl rounded-lg border border-gray-600 overflow-hidden z-50">
+          <div className="absolute right-0 mt-2 w-48 bg-gradient-to-b from-gray-800 to-gray-900 shadow-2xl rounded-lg border border-gray-700 overflow-hidden z-50">
             {!user ? (
               <button
-                className="block w-full px-4 py-3 text-left hover:bg-gray-600 transition-all flex items-center gap-2"
+                className="block w-full px-4 py-3 text-left hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 transition-all duration-300 flex items-center gap-2"
                 onClick={() => navigate("/login")}
               >
                 <FiLogIn size={16} />
                 <span>Login</span>
               </button>
-            ) :(
-            <button 
-              className="block w-full px-4 py-3 text-left hover:bg-gray-600 transition-all flex items-center gap-2" 
-              onClick={handleLogout}
-            >
-              <FiLogOut size={16} />
-              <span>Logout</span>
-            </button>)}
+            ) : (
+              <button 
+                className="block w-full px-4 py-3 text-left hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 transition-all duration-300 flex items-center gap-2" 
+                onClick={handleLogout}
+              >
+                <FiLogOut size={16} />
+                <span>Logout</span>
+              </button>
+            )}
           </div>
         )}
       </div>
