@@ -99,25 +99,25 @@ const AddTodo = () => {
     fetchTodo();
   }, [todoId]);
   
-  return (
-    <div className="flex h-screen bg-gray-900">
+ return (
+    <div className="flex h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-auto">
         <Navbar />
 
         <div className="p-8 max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6 text-white">
-          {todoId ? "Edit Task" : "Create New Task"}
-        </h2>
+          <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            {todoId ? "Edit Task" : "Create New Task"}
+          </h2>
           
-          <form onSubmit={handleSubmit} className="space-y-6 bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
+          <form onSubmit={handleSubmit} className="space-y-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 rounded-lg shadow-2xl border border-gray-700">
             <div>
               <label className="block text-gray-300 mb-2 font-medium">Title</label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full border border-gray-600 bg-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-600 bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 required
                 placeholder="Enter task title"
               />
@@ -128,7 +128,7 @@ const AddTodo = () => {
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full border border-gray-600 bg-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-600 bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 rows="4"
                 required
                 placeholder="Enter task description"
@@ -141,10 +141,10 @@ const AddTodo = () => {
                 {["Daily", "Weekly", "Monthly", "None"].map((option) => (
                   <label 
                     key={option} 
-                    className={`flex items-center justify-center gap-2 p-3 rounded-lg cursor-pointer ${
+                    className={`flex items-center justify-center gap-2 p-3 rounded-lg cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                       frequency === option 
-                        ? 'bg-indigo-600 text-white' 
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30' 
+                        : 'bg-gradient-to-r from-gray-800 to-gray-700 text-gray-300 hover:from-gray-700 hover:to-gray-600'
                     }`}
                   >
                     <input
@@ -164,7 +164,7 @@ const AddTodo = () => {
             <div className="flex gap-4 pt-4">
               <Link
                 to="/"
-                className="flex-1 bg-gray-700 text-white px-4 py-3 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-gray-800 to-gray-700 text-white px-4 py-3 rounded-lg hover:from-gray-700 hover:to-gray-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
               >
                 <FiX size={18} />
                 <span>Cancel</span>
@@ -172,11 +172,10 @@ const AddTodo = () => {
               
               <button
                 type="submit"
-                className="flex-1 bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg shadow-purple-500/30"
               >
                 <FiSave size={18} />
                 <span>{todoId ? "Update Task" : "Save Task"}</span>
-
               </button>
             </div>
           </form>
