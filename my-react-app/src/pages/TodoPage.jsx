@@ -272,18 +272,20 @@ const TodoPage = () => {
     }
   };
 
-  return (
-    <div className="flex h-screen bg-gray-900">
+ return (
+    <div className="flex h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
         <div className="p-6 space-y-6 overflow-auto">
-          <Link to="/" className="inline-flex items-center text-indigo-400 hover:text-indigo-300 mb-4">
+          <Link to="/" className="inline-flex items-center text-purple-400 hover:text-purple-300 mb-4 transition-all duration-300 transform hover:scale-105">
             <FiArrowLeft className="mr-2" />
             Back to dashboard
           </Link>
           
-          <h1 className="text-2xl font-bold text-white mb-6">Task Details</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+            Task Details
+          </h1>
           
           {loading ? (
             <p className="text-gray-400">Loading task...</p>
@@ -304,5 +306,6 @@ const TodoPage = () => {
     </div>
   );
 };
+
 
 export default TodoPage;
