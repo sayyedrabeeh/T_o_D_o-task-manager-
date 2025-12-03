@@ -47,35 +47,35 @@ const SubtaskProgress = ({ subtasks = [], onSubtaskToggle, onDeleteSubtask, onEd
 
   return (
     <div className="mt-3">
-      <div className="bg-gray-700 h-2 rounded-full">
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 h-2 rounded-full overflow-hidden border border-gray-700">
         <div
-          className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
+          className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all duration-500 shadow-lg"
           style={{ width: `${percent}%` }}
         ></div>
       </div>
       <p className="text-xs text-gray-400 mt-1">Progress: {percent}%</p>
 
       {subtasks.map((subtask) => (
-        <div key={subtask.id} className="mt-4 pl-3 border-l border-gray-700">
+        <div key={subtask.id} className="mt-4 pl-3 border-l-2 border-gray-700">
           {editingId === subtask.id ? (
-            <div className="bg-gray-700 p-3 rounded-lg mb-2">
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-3 rounded-lg mb-2 border border-gray-700 shadow-lg">
               <input
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="border border-gray-600 bg-gray-800 px-3 py-2 rounded-lg w-full text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
+                className="border border-gray-600 bg-gradient-to-r from-gray-800 to-gray-900 px-3 py-2 rounded-lg w-full text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-2 transition-all duration-300"
               />
               
               <div className="flex flex-wrap gap-4 text-sm mb-3">
                 {getAllowedFrequencies().map((option) => (
-                  <label key={option} className="flex items-center">
+                  <label key={option} className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name={`frequency-${subtask.id}`}
                       value={option}
                       checked={editFrequency === option}
                       onChange={(e) => setEditFrequency(e.target.value)}
-                      className="mr-2"
+                      className="mr-2 accent-purple-600"
                     />
                     <span className="text-gray-300">{option}</span>
                   </label>
@@ -86,38 +86,38 @@ const SubtaskProgress = ({ subtasks = [], onSubtaskToggle, onDeleteSubtask, onEd
                 <button
                   type="button"
                   onClick={handleSaveEdit}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-3 py-1 rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
                   Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingId(null)}
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                  className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-3 py-1 rounded-lg text-sm transition-all duration-300 transform hover:scale-105"
                 >
                   Cancel
                 </button>
               </div>
             </div>
           ) : (
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex justify-between items-center mb-2 p-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-800/50 hover:to-gray-900/50 transition-all duration-300">
               <div className="flex items-center space-x-2">
                 <p className="text-sm font-medium text-gray-300">{subtask.title}</p>
-                <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-600 text-white">
+                <span className="px-2 py-0.5 text-xs rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg">
                   {subtask.frequency || "None"}
                 </span>
               </div>
               <div className="flex space-x-2">
                 <button 
                   onClick={() => handleEditClick(subtask)}
-                  className="text-gray-400 hover:text-indigo-400 p-1 rounded"
+                  className="text-gray-400 hover:text-purple-400 p-1 rounded transition-all duration-300 transform hover:scale-110"
                   title="Edit subtask"
                 >
                   <FiEdit2 size={14} />
                 </button>
                 <button 
                   onClick={() => onDeleteSubtask(subtask.id)}
-                  className="text-gray-400 hover:text-red-400 p-1 rounded"
+                  className="text-gray-400 hover:text-red-400 p-1 rounded transition-all duration-300 transform hover:scale-110"
                   title="Delete subtask"
                 >
                   <FiTrash2 size={14} />
