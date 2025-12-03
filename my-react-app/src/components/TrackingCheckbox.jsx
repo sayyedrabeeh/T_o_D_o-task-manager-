@@ -75,26 +75,28 @@ const TrackingCheckbox = ({ tracking = {}, frequency, onToggle, disabledOverride
         const isEditable = isEditableDate(dateObj);
         const isPast = isBefore(dateObj, today) && dateObj.getDate() !== today.getDate();
 
-        const baseClasses = "w-5 h-5 rounded cursor-pointer transition transform duration-200";
-        const checkedClass = isChecked ? "bg-green-500 border-green-500" : "bg-transparent border-gray-500";
-        const disabledClass = !isEditable ? "cursor-not-allowed opacity-60" : "";
-
         return (
           <div key={dateStr} className="flex flex-col items-center space-y-1 text-xs text-white">
             <div
-              className={`${baseClasses} ${checkedClass} ${disabledClass} border-2 flex items-center justify-center`}
+              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 ${
+                isChecked 
+                  ? "bg-gradient-to-r from-green-600 to-emerald-600 border-green-500 shadow-lg shadow-green-500/30" 
+                  : isEditable 
+                    ? "bg-gradient-to-r from-gray-800 to-gray-900 border-gray-600 cursor-pointer hover:border-purple-500" 
+                    : "bg-gradient-to-r from-gray-900 to-black border-gray-700 cursor-not-allowed opacity-60"
+              }`}
               onClick={() => handleClick(dateStr)}
               title={`${format(dateObj, "MMM dd, yyyy")} - ${isEditable ? "Editable" : "Locked"}`}
             >
               {isChecked ? (
-                <span className="text-green-300 font-bold">✓</span>
+                <span className="text-white font-bold">✓</span>
               ) : !isEditable && isPast ? (
                 <span className="text-red-400 font-bold">✗</span>
               ) : (
-                <span className="text-gray-400">○</span>
+                <span className="text-gray-500">○</span>
               )}
             </div>
-            <span className="text-gray-400">
+            <span className="text-gray-400 text-xs">
               {frequency === "Daily" ? format(dateObj, "MM/dd") : 
                frequency === "Weekly" ? `W${Math.ceil(dateObj.getDate() / 7)}` : 
                format(dateObj, "MMM")}
