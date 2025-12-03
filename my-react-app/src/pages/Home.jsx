@@ -45,6 +45,7 @@ const Home = () => {
             }
           } else {
             toast.error("You must be logged in to see tasks.");
+            navigate('/login')
           }
         });
       

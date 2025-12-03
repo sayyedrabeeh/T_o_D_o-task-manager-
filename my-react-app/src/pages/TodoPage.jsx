@@ -5,50 +5,54 @@ import { FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth,onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase"; 
 import { parseISO, isSameDay, isSameWeek, isSameMonth } from "date-fns";
 import { toast } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { format, startOfWeek, startOfMonth } from "date-fns";
+import {  useNavigate  } from "react-router-dom";
 
 
 const TodoPage = () => {
   const { id } = useParams();
   const [todo, setTodo] = useState(null);
   const [loading, setLoading] = useState(true);
+const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchTodo = async () => {
-      setLoading(true);
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (!user || !id) {
-          setLoading(false);
-          return;
-        }
+useEffect(() => {
+  const auth = getAuth();
 
-        const todoRef = doc(db, "users", user.uid, "todos", id);
-        const todoSnap = await getDoc(todoRef);
+  const unsubscribe = onAuthStateChanged(auth, async (loggedUser) => {
+    if (!loggedUser) {
+      navigate("/login");
+      return;
+    }
 
-        if (todoSnap.exists()) {
-          setTodo({ id: todoSnap.id, ...todoSnap.data() });
-        } else {
-          toast.error("Todo not found");
-          console.error("Todo not found");
-        }
-      } catch (error) {
-        console.error("Error fetching todo:", error);
-        toast.error("Failed to load task");
-      } finally {
-        setLoading(false);
+ 
+    try {
+      if (!id) return;
+
+      const todoRef = doc(db, "users", loggedUser.uid, "todos", id);
+      const todoSnap = await getDoc(todoRef);
+
+      if (todoSnap.exists()) {
+        setTodo({ id: todoSnap.id, ...todoSnap.data() });
+      } else {
+        toast.error("Todo not found");
       }
-    };
+    } catch (err) {
+      toast.error("Failed to load task");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  });
 
-    fetchTodo();
-  }, [id]);
+  return () => unsubscribe();
+}, [id, navigate]);
+
     
   const isLatestCheckbox = (frequency, dateStr) => {
     const trackingDate = parseISO(dateStr);

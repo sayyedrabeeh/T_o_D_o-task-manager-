@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { FiSave, FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { getAuth } from "firebase/auth";
+import { getAuth,onAuthStateChanged  } from "firebase/auth";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { toast } from "react-hot-toast";
@@ -14,22 +14,54 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 const AddTodo = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [frequency, setFrequency] = useState("None");
+  const [frequency, setFrequency] = useState("None");
+  const [user, setUser] = useState(null);
+
     const navigate = useNavigate();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const todoId = params.get("id");
+  const todoId = params.get("id");
+  
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsub = onAuthStateChanged(auth, async (loggedUser) => {
+      if (!loggedUser) {
+        toast.error("You must be logged in.");
+        navigate("/login");
+        return;
+      }
+
+      setUser(loggedUser);
+
+      if (todoId) {
+        try {
+          const todoRef = doc(db, "users", loggedUser.uid, "todos", todoId);
+          const snap = await getDoc(todoRef);
+
+          if (snap.exists()) {
+            const data = snap.data();
+            setTitle(data.title);
+            setDescription(data.description);
+            setFrequency(data.frequency || "None");
+          } else {
+            toast.error("Todo not found.");
+          }
+        } catch (err) {
+          toast.error("Failed to load task.");
+          console.error(err);
+        }
+      }
+    });
+
+    return () => unsub();
+  }, [todoId, navigate]);
+
 
   const handleSubmit = async  (e) => {
     e.preventDefault();
 
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) {
-        toast.error("You must be logged in to add tasks.");
-        return;
-      }
-
+     if (!user) return;
     const uid = user.uid;
 
 
@@ -77,8 +109,10 @@ const AddTodo = () => {
   
       const auth = getAuth();
       const user = auth.currentUser;
-      if (!user) return toast.error("You must be logged in.");
-  
+      if (!user) {
+         toast.error("You must be logged in.");
+        navigate('/login')
+  }
       try {
         const todoRef = doc(db, "users", user.uid, "todos", todoId);
         const docSnap = await getDoc(todoRef);
