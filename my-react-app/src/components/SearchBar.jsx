@@ -39,19 +39,18 @@ const SearchBar = ({ setResults }) => {
             }
           }, [searchTerm]);
 
-  return (
+ return (
     <div className="relative w-full">
       <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
         <FiSearch size={18} />
       </span>
       <input
-         type="text"
-         value={searchTerm}
-         onChange={(e) => setSearchTerm(e.target.value)}
-         placeholder="Search tasks..."
-         className="w-full pl-12 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200 placeholder:text-gray-400"
-       />
-       
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search tasks..."
+        className="w-full pl-12 pr-4 py-3 bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-200 placeholder:text-gray-400 transition-all duration-300"
+      />
     </div>
   );
 };
