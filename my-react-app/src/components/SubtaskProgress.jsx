@@ -44,7 +44,7 @@ const SubtaskProgress = ({ subtasks = [], onSubtaskToggle, onDeleteSubtask, onEd
     setEditTitle("");
     setEditFrequency("");
   };
-
+ 
   return (
     <div className="mt-3">
       <div className="bg-gradient-to-r from-gray-800 to-gray-900 h-2 rounded-full overflow-hidden border border-gray-700">
