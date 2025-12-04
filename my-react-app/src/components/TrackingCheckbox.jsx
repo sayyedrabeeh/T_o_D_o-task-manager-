@@ -5,6 +5,10 @@ const TrackingCheckbox = ({ tracking = {}, frequency, onToggle, disabledOverride
   const today = new Date();
   
   
+if (frequency === "None") {
+  return <div className="text-gray-400 text-sm">No tracking for this task</div>;
+}
+
   const getStartDate = () => {
     const trackingDates = Object.keys(tracking);
     if (trackingDates.length === 0) return today;
